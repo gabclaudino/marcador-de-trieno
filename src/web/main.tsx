@@ -7,7 +7,9 @@ import EditWorkout from "./pages/EditWorkout";
 import RunWorkout from "./pages/RunWorkout";
 import "./styles.css";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: true } },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
