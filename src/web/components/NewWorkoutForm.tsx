@@ -34,9 +34,9 @@ export default function NewWorkoutForm() {
   }
 
   return (
-    <form className="new-form" onSubmit={submit}>
+    <form className="grid gap-3" onSubmit={submit}>
       <input
-        className="input"
+        className="input w-full"
         autoFocus
         placeholder="Ex.: Peito + Tríceps + Ombro"
         maxLength={100}
@@ -44,7 +44,7 @@ export default function NewWorkoutForm() {
         onChange={(e) => setName(e.target.value)}
         aria-label="Nome do treino"
       />
-      <div className="row">
+      <div className="flex justify-end gap-3">
         <button type="button" className="btn" onClick={() => setOpen(false)}>
           Cancelar
         </button>
@@ -56,7 +56,7 @@ export default function NewWorkoutForm() {
           {create.isPending ? "Criando..." : "Criar"}
         </button>
       </div>
-      {create.isError && <p className="error">Não foi possível criar o treino.</p>}
+      {create.isError && <p className="text-error">Não foi possível criar o treino.</p>}
     </form>
   );
 }

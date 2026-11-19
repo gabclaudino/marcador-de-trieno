@@ -4,10 +4,13 @@ import { formatDate } from "../format";
 
 export default function WorkoutCard({ workout }: { workout: WorkoutListItem }) {
   return (
-    <li className="card">
-      <Link to={`/workouts/${workout.id}/run`} className="card-main">
-        <span className="card-title">{workout.name}</span>
-        <span className="card-sub">
+    <li className="card card-border bg-base-200 flex-row items-stretch overflow-hidden">
+      <Link
+        to={`/workouts/${workout.id}/run`}
+        className="flex-1 min-w-0 flex flex-col gap-0.5 p-4 active:bg-base-300"
+      >
+        <span className="text-lg font-semibold wrap-anywhere">{workout.name}</span>
+        <span className="text-sm opacity-60">
           {workout.last_performed_at
             ? `Último treino: ${formatDate(workout.last_performed_at)}`
             : "Nunca realizado"}
@@ -15,7 +18,7 @@ export default function WorkoutCard({ workout }: { workout: WorkoutListItem }) {
       </Link>
       <Link
         to={`/workouts/${workout.id}/edit`}
-        className="icon-btn"
+        className="btn btn-ghost h-auto rounded-none border-0 border-l border-base-300 px-5"
         aria-label={`Editar ${workout.name}`}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"

@@ -17,26 +17,26 @@ export default function EditWorkout() {
   });
 
   return (
-    <main className="container">
-      <Link to="/" className="back">
+    <>
+      <Link to="/" className="btn btn-ghost btn-sm -ml-2 mb-2">
         ← Treinos
       </Link>
 
       {!valid || (workout.isError && workout.error instanceof ApiError && workout.error.status === 404) ? (
-        <p className="muted">Treino não encontrado.</p>
+        <p className="opacity-60">Treino não encontrado.</p>
       ) : workout.isPending ? (
-        <p className="muted">Carregando...</p>
+        <p className="opacity-60">Carregando...</p>
       ) : workout.isError ? (
-        <div className="notice">
+        <div role="alert" className="alert alert-error alert-soft flex-col items-start">
           <p>Não foi possível carregar o treino.</p>
-          <button type="button" className="btn" onClick={() => workout.refetch()}>
+          <button type="button" className="btn btn-sm" onClick={() => workout.refetch()}>
             Tentar de novo
           </button>
         </div>
       ) : (
         <EditForm workout={workout.data} />
       )}
-    </main>
+    </>
   );
 }
 
@@ -150,12 +150,12 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
 
   return (
     <>
-      <h1>Editar treino</h1>
+      <h1 className="text-2xl font-bold mb-4">Editar treino</h1>
 
-      <label className="field">
-        <span className="muted">Nome do treino</span>
+      <label className="grid gap-1.5">
+        <span className="opacity-60">Nome do treino</span>
         <input
-          className="input"
+          className="input w-full"
           value={name}
           maxLength={100}
           onChange={(e) => setName(e.target.value)}
@@ -164,11 +164,11 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
         />
       </label>
 
-      <h2>Exercícios</h2>
+      <h2 className="text-lg font-bold mt-6 mb-3">Exercícios</h2>
       {exercises.length === 0 ? (
-        <p className="muted">Nenhum exercício ainda. Adicione o primeiro abaixo.</p>
+        <p className="opacity-60">Nenhum exercício ainda. Adicione o primeiro abaixo.</p>
       ) : (
-        <ul className="ex-list">
+        <ul className="grid gap-3">
           {exercises.map((ex, i) => (
             <ExerciseRow
               key={ex.id}
@@ -184,14 +184,18 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
         </ul>
       )}
 
-      <div className="section">
+      <div className="mt-6">
         <AddExerciseForm workoutId={workout.id} />
       </div>
 
-      {error && <p className="error">{error}</p>}
+      {error && (
+        <div role="alert" className="alert alert-error alert-soft mt-4">
+          {error}
+        </div>
+      )}
 
-      <div className="section danger-zone">
-        <button type="button" className="btn btn-danger" onClick={archiveWorkout} disabled={archive.isPending}>
+      <div className="mt-6 border-t border-base-300 pt-4">
+        <button type="button" className="btn btn-error btn-outline" onClick={archiveWorkout} disabled={archive.isPending}>
           Arquivar treino
         </button>
       </div>

@@ -39,59 +39,61 @@ export default function ExerciseRow({
   }
 
   return (
-    <li className="ex-row">
-      <input
-        className="input"
-        value={name}
-        maxLength={100}
-        onChange={(e) => setName(e.target.value)}
-        onBlur={commitName}
-        onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
-        aria-label="Nome do exercício"
-      />
-      <div className="ex-controls">
-        <label className="sets-field">
-          <span className="muted">Séries</span>
-          <input
-            className="input input-num"
-            type="number"
-            inputMode="numeric"
-            min={1}
-            max={20}
-            value={sets}
-            onChange={(e) => setSets(e.target.value)}
-            onBlur={commitSets}
-            onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
-          />
-        </label>
-        <div className="ex-actions">
-          <button
-            type="button"
-            className="btn btn-icon"
-            onClick={() => onMove(exercise.id, -1)}
-            disabled={disabled || isFirst}
-            aria-label={`Subir ${exercise.name}`}
-          >
-            ↑
-          </button>
-          <button
-            type="button"
-            className="btn btn-icon"
-            onClick={() => onMove(exercise.id, 1)}
-            disabled={disabled || isLast}
-            aria-label={`Descer ${exercise.name}`}
-          >
-            ↓
-          </button>
-          <button
-            type="button"
-            className="btn btn-icon btn-danger"
-            onClick={() => onRemove(exercise)}
-            disabled={disabled}
-            aria-label={`Remover ${exercise.name}`}
-          >
-            ×
-          </button>
+    <li className="card card-border bg-base-200">
+      <div className="card-body p-3 gap-2.5">
+        <input
+          className="input w-full"
+          value={name}
+          maxLength={100}
+          onChange={(e) => setName(e.target.value)}
+          onBlur={commitName}
+          onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+          aria-label="Nome do exercício"
+        />
+        <div className="flex items-center justify-between gap-3">
+          <label className="flex items-center gap-2">
+            <span className="opacity-60">Séries</span>
+            <input
+              className="input w-18 text-center"
+              type="number"
+              inputMode="numeric"
+              min={1}
+              max={20}
+              value={sets}
+              onChange={(e) => setSets(e.target.value)}
+              onBlur={commitSets}
+              onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+            />
+          </label>
+          <div className="join">
+            <button
+              type="button"
+              className="btn join-item w-11 px-0 text-lg"
+              onClick={() => onMove(exercise.id, -1)}
+              disabled={disabled || isFirst}
+              aria-label={`Subir ${exercise.name}`}
+            >
+              ↑
+            </button>
+            <button
+              type="button"
+              className="btn join-item w-11 px-0 text-lg"
+              onClick={() => onMove(exercise.id, 1)}
+              disabled={disabled || isLast}
+              aria-label={`Descer ${exercise.name}`}
+            >
+              ↓
+            </button>
+            <button
+              type="button"
+              className="btn btn-error btn-outline join-item w-11 px-0 text-lg"
+              onClick={() => onRemove(exercise)}
+              disabled={disabled}
+              aria-label={`Remover ${exercise.name}`}
+            >
+              ×
+            </button>
+          </div>
         </div>
       </div>
     </li>

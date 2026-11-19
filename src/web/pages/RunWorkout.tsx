@@ -1,7 +1,3 @@
 export default function RunWorkout() {
-  return (
-    <main className="container">
-      <h1>Executar treino</h1>
-    </main>
-  );
+  return <h1 className="text-2xl font-bold">Executar treino</h1>;
 }
