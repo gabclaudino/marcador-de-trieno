@@ -1,0 +1,3 @@
+# Copie para .dev.vars (ignorado pelo git) para rodar localmente.
+# NUNCA defina DEV_BYPASS_AUTH em produção.
+DEV_BYPASS_AUTH=true
