@@ -4,8 +4,12 @@ import { z } from "zod";
 const id = z.number().int().positive();
 const name = z.string().trim().min(1).max(100);
 const targetSets = z.number().int().min(1).max(20);
-const reps = z.number().int().min(0);
-const weightKg = z.number().min(0);
+const reps = z.number().int().min(0).max(10_000);
+const weightKg = z.number().min(0).max(5_000);
+
+/** Tetos para impedir corpos gigantes (a API é só do dono, mas o D1 tem custo/limites). */
+export const MAX_SETS_PER_SESSION = 500;
+export const MAX_REORDER_IDS = 100;
 
 // ---------- Entidades ----------
 export const WorkoutSchema = z.object({
@@ -66,7 +70,11 @@ export type UpdateExercise = z.infer<typeof UpdateExerciseSchema>;
 
 /** Reordenação: ids dos exercícios na nova ordem. */
 export const ReorderSchema = z.object({
-  ids: z.array(id).min(1).refine((a) => new Set(a).size === a.length, "ids repetidos"),
+  ids: z
+    .array(id)
+    .min(1)
+    .max(MAX_REORDER_IDS)
+    .refine((a) => new Set(a).size === a.length, "ids repetidos"),
 });
 export type Reorder = z.infer<typeof ReorderSchema>;
 
@@ -84,6 +92,7 @@ export const CreateSessionSchema = z.object({
   sets: z
     .array(SetInputSchema)
     .min(1)
+    .max(MAX_SETS_PER_SESSION)
     .refine(
       (sets) =>
         new Set(sets.map((s) => `${s.exercise_id}:${s.set_number}`)).size === sets.length,
