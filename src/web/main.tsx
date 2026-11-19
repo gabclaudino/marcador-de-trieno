@@ -6,7 +6,11 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import EditWorkout from "./pages/EditWorkout";
 import RunWorkout from "./pages/RunWorkout";
+import { registerSW } from "virtual:pwa-register";
 import "./styles.css";
+
+// Service worker (só existe no build de produção).
+registerSW({ immediate: true });
 
 // Resultados traz o Recharts (pesado): carregado só quando a tela é aberta.
 const Results = lazy(() => import("./pages/Results"));
