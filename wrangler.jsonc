@@ -13,6 +13,15 @@
     "ACCESS_TEAM_DOMAIN": "",
     "ACCESS_AUD": "",
     "OWNER_EMAIL": ""
-  }
-  // Fase 2: adicionar "d1_databases" com o binding DB e o database_id.
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "treino-db",
+      // Placeholder: serve para dev local. Na Fase 10, rodar `wrangler d1 create treino-db`
+      // e colocar aqui o database_id real.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ]
 }
