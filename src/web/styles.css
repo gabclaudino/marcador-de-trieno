@@ -189,6 +189,83 @@ a {
   justify-content: flex-end;
 }
 
+/* Edição de treino */
+h2 {
+  font-size: 1.15rem;
+  margin: 24px 0 12px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--muted);
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.ex-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.ex-row,
+.add-form {
+  display: grid;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.ex-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sets-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-num {
+  width: 72px;
+  text-align: center;
+}
+
+.ex-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 44px;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.btn-danger {
+  color: var(--danger);
+  border-color: var(--danger);
+  background: transparent;
+}
+
+.danger-zone {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
 /* Telas largas (PC) */
 @media (min-width: 768px) {
   .container {
