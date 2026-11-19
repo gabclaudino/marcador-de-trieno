@@ -1,7 +1,10 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useMatch } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Layout() {
+  // Resultados usa mais largura no PC (gráfico e sessões lado a lado).
+  const wide = useMatch("/workouts/:id/results") !== null;
+
   return (
     <>
       <header className="navbar bg-base-200 border-b border-base-300 px-4">
@@ -10,7 +13,9 @@ export default function Layout() {
         </Link>
         <ThemeToggle />
       </header>
-      <main className="mx-auto w-full max-w-180 p-4 pb-10 md:pt-8">
+      <main
+        className={`mx-auto w-full p-4 pb-10 md:pt-8 ${wide ? "max-w-5xl" : "max-w-180"}`}
+      >
         <Outlet />
       </main>
     </>

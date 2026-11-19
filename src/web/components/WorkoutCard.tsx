@@ -17,8 +17,19 @@ export default function WorkoutCard({ workout }: { workout: WorkoutListItem }) {
         </span>
       </Link>
       <Link
+        to={`/workouts/${workout.id}/results`}
+        className="btn btn-ghost h-auto rounded-none border-0 border-l border-base-300 px-4"
+        aria-label={`Resultados de ${workout.name}`}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M3 3v18h18" />
+          <path d="M7 15l4-4 3 3 5-6" />
+        </svg>
+      </Link>
+      <Link
         to={`/workouts/${workout.id}/edit`}
-        className="btn btn-ghost h-auto rounded-none border-0 border-l border-base-300 px-5"
+        className="btn btn-ghost h-auto rounded-none border-0 border-l border-base-300 px-4"
         aria-label={`Editar ${workout.name}`}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
