@@ -9,18 +9,21 @@
     // Rotas /api/* sempre passam pelo Worker.
     "run_worker_first": ["/api/*"]
   },
-  "vars": {
-    "ACCESS_TEAM_DOMAIN": "",
-    "ACCESS_AUD": "",
-    "OWNER_EMAIL": ""
-  },
+  // Só o custom domain (protegido pelo Cloudflare Access) deve responder.
+  // workers.dev e URLs de preview ficariam fora do Access.
+  "workers_dev": false,
+  "preview_urls": false,
+  // Segredos (NÃO ficam neste arquivo, para não versionar e-mail/IDs):
+  //   wrangler secret put ACCESS_TEAM_DOMAIN   (ex.: meutime.cloudflareaccess.com)
+  //   wrangler secret put ACCESS_AUD           (AUD tag da Access application)
+  //   wrangler secret put OWNER_EMAIL          (seu e-mail)
+  // Veja DEPLOY.md. Em dev local usa-se DEV_BYPASS_AUTH no .dev.vars.
+  "routes": [{ "pattern": "treino.gabizao.dev", "custom_domain": true }],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "treino-db",
-      // Placeholder: serve para dev local. Na Fase 10, rodar `wrangler d1 create treino-db`
-      // e colocar aqui o database_id real.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "34ada5ef-2c67-4e5f-8107-771f1dbbba1a",
       "migrations_dir": "migrations"
     }
   ]
