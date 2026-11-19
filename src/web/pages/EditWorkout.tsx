@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, api } from "../api";
@@ -46,6 +46,9 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
   const key = ["workout", workout.id] as const;
   const [name, setName] = useState(workout.name);
   const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  // Marca se alguma gravação falhou desde o último clique em "Salvar".
+  const failed = useRef(false);
 
   const refresh = () => {
     queryClient.invalidateQueries({ queryKey: key });
@@ -59,6 +62,7 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
       refresh();
     },
     onError: () => {
+      failed.current = true;
       setName(workout.name);
       setError("Não foi possível renomear o treino.");
     },
@@ -71,7 +75,10 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
       queryClient.invalidateQueries({ queryKey: ["workouts"] });
       navigate("/");
     },
-    onError: () => setError("Não foi possível arquivar o treino."),
+    onError: () => {
+      failed.current = true;
+      setError("Não foi possível arquivar o treino.");
+    },
   });
 
   const updateExercise = useMutation({
@@ -82,6 +89,7 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
       refresh();
     },
     onError: (_e, vars) => {
+      failed.current = true;
       vars.onFail();
       setError("Não foi possível salvar o exercício.");
     },
@@ -102,6 +110,7 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
       return { previous };
     },
     onError: (_e, _ids, ctx) => {
+      failed.current = true;
       if (ctx?.previous) queryClient.setQueryData(key, ctx.previous);
       setError("Não foi possível reordenar.");
     },
@@ -114,7 +123,10 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
       setError(null);
       refresh();
     },
-    onError: () => setError("Não foi possível remover o exercício."),
+    onError: () => {
+      failed.current = true;
+      setError("Não foi possível remover o exercício.");
+    },
   });
 
   const busy = reorder.isPending || removeExercise.isPending;
@@ -140,6 +152,31 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
     if (window.confirm(`Remover "${ex.name}" do treino? O histórico é mantido.`)) {
       removeExercise.mutate(ex);
     }
+  }
+
+  /**
+   * "Salvar": confirma o campo que ainda está sendo editado (o blur dispara a gravação),
+   * espera todas as gravações em andamento terminarem e volta para a Home.
+   * Se alguma falhar, fica na tela com a mensagem de erro.
+   */
+  async function save() {
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    failed.current = false;
+    setError(null);
+    setSaving(true);
+
+    (document.activeElement as HTMLElement | null)?.blur();
+    await wait(0);
+    const deadline = Date.now() + 10_000;
+    while (queryClient.isMutating() > 0 && Date.now() < deadline) await wait(40);
+
+    setSaving(false);
+    if (failed.current) return; // a mensagem de erro já foi mostrada
+    if (queryClient.isMutating() > 0) {
+      setError("Demorou demais para salvar. Verifique a conexão e tente de novo.");
+      return;
+    }
+    navigate("/");
   }
 
   function archiveWorkout() {
@@ -197,6 +234,12 @@ function EditForm({ workout }: { workout: WorkoutDetail }) {
       <div className="mt-6 border-t border-base-300 pt-4">
         <button type="button" className="btn btn-error btn-outline" onClick={archiveWorkout} disabled={archive.isPending}>
           Arquivar treino
+        </button>
+      </div>
+
+      <div className="sticky bottom-0 -mx-4 mt-4 border-t border-base-300 bg-base-100/95 p-4 backdrop-blur">
+        <button type="button" className="btn btn-primary btn-block" onClick={save} disabled={saving}>
+          {saving ? "Salvando..." : "Salvar"}
         </button>
       </div>
     </>
